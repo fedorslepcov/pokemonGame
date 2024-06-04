@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <style type="text/css">
+        .item {
+            width: 150px;
+            height: 150px;
+            background-size:100%;
+            background-repeat: no-repeat;
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            height: 200px;
+            width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .active{
+            border: 5px solid grey;
+            height: 140px;
+        }
+        .main{
+            height: 870px;
+            width: 720px;
+            margin-left: auto;
+            margin-right: auto;
+            background: red;
+            border-radius: 20px;
+        }
+        .fon{
+            height: 900px;
+            width: 100%;
+            background: orange;
+        }
+        .score{
+            font-size: 40px;
+            position: absolute;
+            top: 60px;
+            left: 40px;
+        }
+        .txt{
+            font-size: 40px;
+            position: absolute;
+            top: 50px;
+            left: 50px;
+        }
+        .tpk{
+            font-size: 40px;
+            position: absolute;
+            top: 60px;
+            left: 1250px;
+        }
+        .pikch{
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            left: 70px;
+            top: 450px;
+            background-image: url(pikachu2.png);
+            background-size: 100% 100%;
+        }
+        .bulb{
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            left: 1200px;
+            top: 450px;
+            background-image: url(bulb2.png);
+            background-size: 100% 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="tpk"><p>Время:</p><span class="time"></span></div>
+    <div class="fon"><div class="pikch"></div><div class="bulb"></div><p class="txt">Счёт:<span class="score"></span></p>
+        <div class="main">
+            <div class="row">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    //див-родитель
+    let row = document.querySelector(".row");
+
+    let points = 0
+    let sc = document.querySelector('.points')
+    let score = document.querySelector('.score')
+    let time = document.querySelector('.time')
+    let t = 12
+
+    //хранение картинок
+    let images = ["1.png", "2.png", "3.png", "4.png", "5.png", "6.png", "1.png", "2.png", "3.png", "4.png", "5.png", "6.png", "1.png", "2.png", "1.png", "2.png", "3.png", "4.png", "3.png", "4.png"];
+
+    let past_pokemon = null;
+
+    let getRandom = function(num){
+        let rand = Math.random() * num
+        let round = Math.round(rand)
+
+        return round
+    }
+
+
+    for(let i = 0; i < 20; i++ ){
+        let pokemon = document.createElement("div")
+        row.appendChild(pokemon)
+
+        pokemon.classList.add("item")
+
+        let randomIndex = getRandom(images.length - 1)
+        console.log(randomIndex)
+
+        pokemon.style.backgroundImage = 'url(' + images[randomIndex] + ')'
+
+        pokemon.image = images[randomIndex]
+
+        images.splice(randomIndex, 1)
+
+
+        pokemon.onclick = function(){
+
+            pokemon.classList.add("active")
+
+            if(past_pokemon == null){
+                past_pokemon = pokemon
+            }
+            else if(pokemon.image == past_pokemon.image){
+                pokemon.style.opacity = '0'
+                past_pokemon.style.opacity = '0' 
+                past_pokemon = null
+                points = points + 1
+                score.innerHTML = points
+            }
+            else if (pokemon.image != past_pokemon.image){
+                past_pokemon.classList.remove('active')
+                pokemon.classList.remove('active')
+                past_pokemon = null
+                points = points - 1
+                score.innerHTML = points
+            }
+
+        }
+    }
+        let timer = function(){
+            if (points >= 9){
+                alert('You win!')
+            }else if (points < 9){
+                alert('You lose!')
+            }
+        }
+
+        setTimeout(timer, 12000)
+
+        let displayTime = function(){
+            t = t - 1
+            time.innerHTML = t 
+
+            if(t <= 0){
+                clearInterval(timeInt)
+            }
+        }
+    
+
+        timeInt = setInterval(displayTime, 1000)
+    </script>
+</body>
+</html>
